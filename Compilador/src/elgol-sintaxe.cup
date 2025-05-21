@@ -1,0 +1,79 @@
+import java_cup.runtime.*;
+import java.util.*;
+import java.io.*;
+
+parser code {:
+
+    public void report_error(String message, Object info)  {
+        System.out.println("WarningSSS - " + message);
+    }
+
+    public void report_fatal_error(String message, Object info)  {
+        System.out.println("ErrorSSSS - " + message);
+        System.exit(-1);
+    }
+
+:};
+
+// Tokens terminais
+terminal IDENT, NUM, FUNC, PT;
+terminal ELGIO, INTEIRO, ZERO, COMP;
+terminal ENQUANTO, SE, ENTAO, SENAO;
+terminal INICIO, FIM;
+terminal MAIOR, MENOR, IGUAL, DIFERENTE;
+terminal SEPARADOR; 
+terminal MAIS, MENOS, MULT, DIV;
+terminal PARENTESE1, PARENTESE2;
+
+
+
+// Não-terminais
+non terminal programa, bloco, comandos, comando, expressao, termo, fator, chamada_funcao;
+non terminal condicao, comando_se, comando_enquanto, atribuicao;
+non terminal parametros;
+
+// Início da gramática
+start with programa;
+
+// Regras
+
+programa ::= comandos FIM;
+
+comandos ::= comando comandos
+           | comando;
+
+comando ::= atribuicao PT
+          | comando_se
+          | comando_enquanto
+          | chamada_funcao PT;
+
+atribuicao ::= IDENT IGUAL expressao;
+
+comando_se ::= SE condicao ENTAO comandos SENAO comandos FIM
+             | SE condicao ENTAO comandos FIM;
+
+comando_enquanto ::= ENQUANTO condicao ENTAO comandos FIM;
+
+condicao ::= expressao MAIOR expressao
+           | expressao MENOR expressao
+           | expressao IGUAL expressao
+           | expressao DIFERENTE expressao;
+
+expressao ::= expressao MAIS termo
+            | expressao MENOS termo
+            | termo;
+
+termo ::= termo MULT fator
+        | termo DIV fator
+        | fator;
+
+fator ::= NUM
+        | ZERO
+        | IDENT
+        | COMP PARENTESE1 expressao PARENTESE2
+        | PARENTESE1 expressao PARENTESE2;
+
+chamada_funcao ::= FUNC PARENTESE1 parametros PARENTESE2;
+
+parametros ::= expressao
+             | expressao SEPARADOR parametros;
