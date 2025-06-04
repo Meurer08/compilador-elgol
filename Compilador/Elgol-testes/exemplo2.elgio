@@ -1,0 +1,6 @@
+inteiro _Fazalgo (inteiro Fazum, inteiro Fazdois) .
+inicio.
+   inteiro Variavel .
+   Fazum = 0;
+   Fazum = 45 * 20 .
+fim.
