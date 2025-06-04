@@ -12,11 +12,10 @@ public class sym {
   public static final int ENTAO = 12;
   public static final int IDENT = 2;
   public static final int IGUAL = 18;
-  public static final int COMP = 9;
   public static final int PARENTESE2 = 26;
-  public static final int ELGIO = 6;
+  public static final int ELGIO = 7;
   public static final int PARENTESE1 = 25;
-  public static final int INTEIRO = 7;
+  public static final int INTEIRO = 8;
   public static final int PT = 5;
   public static final int NUM = 3;
   public static final int MAIS = 21;
@@ -26,10 +25,11 @@ public class sym {
   public static final int FUNC = 4;
   public static final int DIFERENTE = 19;
   public static final int DIV = 24;
+  public static final int RECEBE = 6;
   public static final int error = 1;
   public static final int MAIOR = 16;
   public static final int SE = 11;
-  public static final int ZERO = 8;
+  public static final int ZERO = 9;
   public static final int ENQUANTO = 10;
   public static final int FIM = 15;
   public static final int INICIO = 14;
@@ -40,10 +40,10 @@ public class sym {
   "NUM",
   "FUNC",
   "PT",
+  "RECEBE",
   "ELGIO",
   "INTEIRO",
   "ZERO",
-  "COMP",
   "ENQUANTO",
   "SE",
   "ENTAO",

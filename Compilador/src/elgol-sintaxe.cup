@@ -5,19 +5,23 @@ import java.io.*;
 parser code {:
 
     public void report_error(String message, Object info)  {
-        System.out.println("WarningSSS - " + message);
+        Symbol sym = (Symbol) info;
+        System.out.println("Warning - " + message);
+        System.out.println("Info - " + info);
+        System.err.println("Token: " + sym.value);
+        System.err.println("Linha: " + sym.left + ", Coluna: " + sym.right);
     }
 
     public void report_fatal_error(String message, Object info)  {
-        System.out.println("ErrorSSSS - " + message);
-        System.exit(-1);
+        System.out.println("Error - " + message);
+        System.out.println("Info - " + info);
     }
 
 :};
 
 // Tokens terminais
-terminal IDENT, NUM, FUNC, PT;
-terminal ELGIO, INTEIRO, ZERO, COMP;
+terminal IDENT, NUM, FUNC, PT, RECEBE;
+terminal ELGIO, INTEIRO, ZERO;
 terminal ENQUANTO, SE, ENTAO, SENAO;
 terminal INICIO, FIM;
 terminal MAIOR, MENOR, IGUAL, DIFERENTE;
@@ -28,31 +32,45 @@ terminal PARENTESE1, PARENTESE2;
 
 
 // Não-terminais
-non terminal programa, bloco, comandos, comando, expressao, termo, fator, chamada_funcao;
-non terminal condicao, comando_se, comando_enquanto, atribuicao;
-non terminal parametros;
+non terminal programa, bloco_principal, declaracoes_funcoes;
+non terminal comandos, comando, comando_ou_vazio;
+non terminal declaracao_variavel, atribuicao, comando_se, comando_enquanto, condicao;
+non terminal expressao, termo, fator;
+non terminal chamada_funcao, uso_param, declara_funcao, parametros, construcao_funcao;
+non terminal regras_funcao, expressao_retorno, termo_retorno, fator_retorno;
+non terminal retorno_funcao, corpo_funcao;
 
 // Início da gramática
 start with programa;
 
-// Regras
+// Regras principais
 
-programa ::= comandos FIM;
+programa ::= declaracoes_funcoes bloco_principal {: System.out.println("Expressão válida!"); :};
+
+declaracoes_funcoes ::= construcao_funcao declaracoes_funcoes
+                      | /* vazio */;
+
+bloco_principal ::= INICIO PT comandos FIM PT;
 
 comandos ::= comando comandos
            | comando;
 
-comando ::= atribuicao PT
+comando ::= declaracao_variavel PT
+          | atribuicao PT
           | comando_se
-          | comando_enquanto
-          | chamada_funcao PT;
+          | comando_enquanto;
 
-atribuicao ::= IDENT IGUAL expressao;
+// Declarar variável com tipo 'inteiro'
+declaracao_variavel ::= INTEIRO IDENT ;
 
-comando_se ::= SE condicao ENTAO comandos SENAO comandos FIM
-             | SE condicao ENTAO comandos FIM;
+// Atribuição sem tipo
+atribuicao ::= INTEIRO IDENT RECEBE expressao | IDENT RECEBE expressao;
 
-comando_enquanto ::= ENQUANTO condicao ENTAO comandos FIM;
+// Comando SE
+comando_se ::= SE condicao PT ENTAO PT INICIO PT comandos FIM PT SENAO PT INICIO PT comando_ou_vazio FIM PT;
+
+// Comando ENQUANTO
+comando_enquanto ::= ENQUANTO condicao PT INICIO PT comandos FIM PT;
 
 condicao ::= expressao MAIOR expressao
            | expressao MENOR expressao
@@ -68,12 +86,43 @@ termo ::= termo MULT fator
         | fator;
 
 fator ::= NUM
+        | chamada_funcao
         | ZERO
-        | IDENT
-        | COMP PARENTESE1 expressao PARENTESE2
-        | PARENTESE1 expressao PARENTESE2;
+        | IDENT;
 
-chamada_funcao ::= FUNC PARENTESE1 parametros PARENTESE2;
+// Funções
 
-parametros ::= expressao
-             | expressao SEPARADOR parametros;
+construcao_funcao ::= declara_funcao INICIO PT corpo_funcao FIM PT;
+
+declara_funcao ::= INTEIRO FUNC PARENTESE1 parametros PARENTESE2 PT;
+
+
+
+parametros ::= INTEIRO IDENT
+             | INTEIRO IDENT SEPARADOR parametros
+             | /* vazio */;
+
+corpo_funcao ::= regras_funcao retorno_funcao;
+
+regras_funcao ::= comando regras_funcao
+                | comando;
+
+expressao_retorno ::= expressao_retorno MAIS termo_retorno
+                    | expressao_retorno MENOS termo_retorno
+                    | termo_retorno;
+
+termo_retorno ::= termo_retorno MULT fator_retorno
+                | termo_retorno DIV fator_retorno
+                | fator_retorno;
+
+fator_retorno ::= NUM
+                | ZERO
+                | IDENT;
+
+uso_param ::= fator_retorno SEPARADOR uso_param
+            | fator_retorno;
+
+retorno_funcao ::= ELGIO RECEBE expressao_retorno PT
+                 | /* vazio */;
+
+chamada_funcao ::= FUNC PARENTESE1 uso_param PARENTESE2;

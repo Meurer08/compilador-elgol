@@ -25,31 +25,31 @@ comentario = \#.*
 {funcoes}         { return new Symbol(sym.FUNC, yyline + 1, yycolumn + 1); }
 {pontuacao}       { return new Symbol(sym.PT, yyline + 1, yycolumn + 1); }
 {espacos}         { /* ignora */ }
-{comentario}      { /* ignora */ }
+{comentario}      { System.out.printf("Comentario: %s \n", yytext()); }
 
-"elgio"           { return new Symbol(sym.ELGIO); }
-"inteiro"         { return new Symbol(sym.INTEIRO); }
-"zero"            { return new Symbol(sym.ZERO); }
-"comp"            { return new Symbol(sym.COMP); }
-"enquanto"        { return new Symbol(sym.ENQUANTO); }
-"se"              { return new Symbol(sym.SE); }
-"entao"           { return new Symbol(sym.ENTAO); }
-"senao"           { return new Symbol(sym.SENAO); }
-"inicio"          { return new Symbol(sym.INICIO); }
-"fim"             { return new Symbol(sym.FIM); }
-"maior"           { return new Symbol(sym.MAIOR); }
-"menor"           { return new Symbol(sym.MENOR); }
-"igual"           { return new Symbol(sym.IGUAL); }
-"diferente"       { return new Symbol(sym.DIFERENTE); }
-","               { return new Symbol(sym.SEPARADOR); }
-"+"               { return new Symbol(sym.MAIS); }
-"-"               { return new Symbol(sym.MENOS); }
-"x"               { return new Symbol(sym.MULT); }
-"/"               { return new Symbol(sym.DIV); }
-"("               { return new Symbol(sym.PARENTESE1); }
-")"               { return new Symbol(sym.PARENTESE2); }
+"elgio"           { return new Symbol(sym.ELGIO, yyline + 1, yycolumn + 1); }
+"inteiro"         { return new Symbol(sym.INTEIRO, yyline + 1, yycolumn + 1); }
+"zero"            { return new Symbol(sym.ZERO, yyline + 1, yycolumn + 1); }
+"="               { return new Symbol(sym.RECEBE, yyline + 1, yycolumn + 1); }
+"enquanto"        { return new Symbol(sym.ENQUANTO, yyline + 1, yycolumn + 1); }
+"se"              { return new Symbol(sym.SE, yyline + 1, yycolumn + 1); }
+"entao"           { return new Symbol(sym.ENTAO, yyline + 1, yycolumn + 1); }
+"senao"           { return new Symbol(sym.SENAO, yyline + 1, yycolumn + 1); }
+"inicio"          { return new Symbol(sym.INICIO, yyline + 1, yycolumn + 1); }
+"fim"             { return new Symbol(sym.FIM, yyline + 1, yycolumn + 1); }
+"maior"           { return new Symbol(sym.MAIOR, yyline + 1, yycolumn + 1); }
+"menor"           { return new Symbol(sym.MENOR, yyline + 1, yycolumn + 1); }
+"igual"           { return new Symbol(sym.IGUAL, yyline + 1, yycolumn + 1); }
+"diferente"       { return new Symbol(sym.DIFERENTE, yyline + 1, yycolumn + 1); }
+","               { return new Symbol(sym.SEPARADOR, yyline + 1, yycolumn + 1); }
+"+"               { return new Symbol(sym.MAIS, yyline + 1, yycolumn + 1); }
+"-"               { return new Symbol(sym.MENOS, yyline + 1, yycolumn + 1); }
+"x"               { return new Symbol(sym.MULT, yyline + 1, yycolumn + 1); }
+"/"               { return new Symbol(sym.DIV, yyline + 1, yycolumn + 1); }
+"("               { return new Symbol(sym.PARENTESE1, yyline + 1, yycolumn + 1); }
+")"               { return new Symbol(sym.PARENTESE2, yyline + 1, yycolumn + 1); }
 
 .                 { 
-                    System.out.printf("Caractere inválido: %s %s", yytext(), yyline + 1); 
+                    System.out.printf("Caractere inválido: %s %s %s", yytext(), yycolumn + 1, yyline + 1); 
                     return new Symbol(sym.error); 
                   }
