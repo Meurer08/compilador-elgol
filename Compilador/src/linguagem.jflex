@@ -25,7 +25,7 @@ comentario = \#.*
 {funcoes}         { return new Symbol(sym.FUNC, yyline + 1, yycolumn + 1); }
 {pontuacao}       { return new Symbol(sym.PT, yyline + 1, yycolumn + 1); }
 {espacos}         { /* ignora */ }
-{comentario}      { System.out.printf("Comentario: %s \n", yytext()); }
+{comentario}      { /* ignora */}
 
 "elgio"           { return new Symbol(sym.ELGIO, yyline + 1, yycolumn + 1); }
 "inteiro"         { return new Symbol(sym.INTEIRO, yyline + 1, yycolumn + 1); }
@@ -51,5 +51,5 @@ comentario = \#.*
 
 .                 { 
                     System.out.printf("Caractere inválido: %s %s %s", yytext(), yycolumn + 1, yyline + 1); 
-                    return new Symbol(sym.error); 
+                    return new Symbol(sym.error, yycolumn + 1, yyline + 1); 
                   }

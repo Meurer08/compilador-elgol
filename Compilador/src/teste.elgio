@@ -1,27 +1,22 @@
-# erros sintáticos
-inteiro _Fazalgo(inteiro Fazum, inteiro Xxxx). # falta id depois do inteiro
-inicio .  						# faltou .
-   inteiro Lixo.
+# Linguagem Elgol
+# autor Elgio Schlemer
+# sem erros
+inteiro _Fazalgo (inteiro Fazum, inteiro Fazdois) .
+inicio .
+   inteiro Lixo .
    
-   Lixo = Fazum - Fazdois + zero x. # operador x precisa de 2 operandos
-   elgio = Lixo + _Soma(20,30).     # elgio não permite ter função
-fim.
+   Lixo = Fazum x Fazdois + zero .
+   elgio = Lixo .
+fim .
 
-inicio.
-  inteiro Variavel Lixo.   # Não pode ter , aqui
-  inteiro Teste.
+# programa principal, fora de função
+# deve começar também com inicio e fim que seriam os
+# { e } do C
+inicio .
+  inteiro Variavel .
+  inteiro Teste .
   
-  Variavel = zero.
-  
-  Teste = 45 x _Fazalgo (50, Variavel).
-  
-  se Teste maior zero.
-  entao.
-  inicio.
-    Variavel = Teste igual Lixo. # Somente exp mat podem ser atribuídas
-  fim.
-  # erro semântico (não implementar). Faltou senao
-  
-  Variavel = Variavel + Nova + 3 - 5 x 2 / 2 + Teste.
-  # semântico: Nova não foi declarada
+  Variavel = zero .
+  Teste = 45 x _Fazalgo (45, Variavel) .  
+  Variavel = Variavel + 3 - 5 x 2 / 2 + Teste .
 fim.

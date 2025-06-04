@@ -3,20 +3,16 @@ import java.util.*;
 import java.io.*;
 
 parser code {:
-
-    public void report_error(String message, Object info)  {
-        Symbol sym = (Symbol) info;
-        System.out.println("Warning - " + message);
-        System.out.println("Info - " + info);
-        System.err.println("Token: " + sym.value);
-        System.err.println("Linha: " + sym.left + ", Coluna: " + sym.right);
+  public void report_error(String message, Object info) {
+    if (info instanceof java_cup.runtime.Symbol) {
+      java_cup.runtime.Symbol sym = (java_cup.runtime.Symbol) info;
+      int line = sym.left;   // aqui pega o valor left que foi passado no Symbol
+      int col = sym.right;   // aqui pega o right (ou use outra estratégia)
+      System.err.printf("Erro sintático na linha %d, coluna %d: %s\n", line, col, message);
+    } else {
+      System.err.println("Erro sintático: " + message);
     }
-
-    public void report_fatal_error(String message, Object info)  {
-        System.out.println("Error - " + message);
-        System.out.println("Info - " + info);
-    }
-
+  }
 :};
 
 // Tokens terminais
@@ -38,7 +34,7 @@ non terminal declaracao_variavel, atribuicao, comando_se, comando_enquanto, cond
 non terminal expressao, termo, fator;
 non terminal chamada_funcao, uso_param, declara_funcao, parametros, construcao_funcao;
 non terminal regras_funcao, expressao_retorno, termo_retorno, fator_retorno;
-non terminal retorno_funcao, corpo_funcao;
+non terminal retorno_funcao, corpo_funcao, add_ident;
 
 // Início da gramática
 start with programa;
@@ -61,13 +57,17 @@ comando ::= declaracao_variavel PT
           | comando_enquanto;
 
 // Declarar variável com tipo 'inteiro'
-declaracao_variavel ::= INTEIRO IDENT ;
+declaracao_variavel ::= INTEIRO add_ident ;
+
+add_ident ::= IDENT add_ident | /* vazio */;
 
 // Atribuição sem tipo
 atribuicao ::= INTEIRO IDENT RECEBE expressao | IDENT RECEBE expressao;
 
 // Comando SE
 comando_se ::= SE condicao PT ENTAO PT INICIO PT comandos FIM PT SENAO PT INICIO PT comando_ou_vazio FIM PT;
+
+comando_ou_vazio ::= comandos | /* vazio */;
 
 // Comando ENQUANTO
 comando_enquanto ::= ENQUANTO condicao PT INICIO PT comandos FIM PT;
