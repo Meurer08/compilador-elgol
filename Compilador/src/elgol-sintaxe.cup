@@ -6,8 +6,8 @@ parser code {:
   public void report_error(String message, Object info) {
     if (info instanceof java_cup.runtime.Symbol) {
       java_cup.runtime.Symbol sym = (java_cup.runtime.Symbol) info;
-      int line = sym.left;   // aqui pega o valor left que foi passado no Symbol
-      int col = sym.right;   // aqui pega o right (ou use outra estratégia)
+      int line = sym.left;  
+      int col = sym.right;  
       System.err.printf("Erro sintático na linha %d, coluna %d: %s\n", line, col, message);
     } else {
       System.err.println("Erro sintático: " + message);
